@@ -1,15 +1,676 @@
 <!DOCTYPE html>
 <html lang="ru">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>ULTIMA 9.0 — Где цели превращаются в результат</title>
-    <style>
-      * { margin: 0; padding: 0; box-sizing: border-box; }
-      body { background: #000; overflow: hidden; }
-    </style>
-  </head>
-  <body>
-    <div id="root"></div>
-  </body>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Газ Кавказ — Премиальные автомобильные путешествия</title>
+  <meta name="description" content="Частные автомобильные путешествия по Сочи, Красной Поляне и Абхазии на спортивных автомобилях с фото и видео съёмкой." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --white:    #ffffff;
+      --cream:    #f7f5f2;
+      --light:    #eeebe6;
+      --graphite: #1c1c1c;
+      --mid:      #4a4a4a;
+      --muted:    #8a8a8a;
+      --border:   #e0dbd4;
+      --red:      #c8102e;
+      --red-dk:   #a30d24;
+      --ff-head:  'Cormorant Garamond', Georgia, serif;
+      --ff-body:  'DM Sans', sans-serif;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--white);
+      color: var(--graphite);
+      font-family: var(--ff-body);
+      font-size: 16px;
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+    a { color: inherit; text-decoration: none; }
+    .container  { max-width: 1140px; margin: 0 auto; padding: 0 32px; }
+    .section    { padding: 100px 0; }
+    @media (max-width: 768px) { .section { padding: 64px 0; } .container { padding: 0 20px; } }
+
+    /* NAV */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      padding: 22px 0;
+      transition: background .35s, padding .35s, box-shadow .35s;
+    }
+    nav.scrolled {
+      background: rgba(255,255,255,0.96);
+      backdrop-filter: blur(10px);
+      padding: 14px 0;
+      box-shadow: 0 1px 0 var(--border);
+    }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; }
+    .nav-logo { font-family: var(--ff-head); font-size: 22px; font-weight: 500; letter-spacing: .04em; color: var(--white); transition: color .35s; }
+    nav.scrolled .nav-logo { color: var(--graphite); }
+    .nav-logo span { color: var(--red); }
+    .nav-links { display: flex; gap: 36px; }
+    @media (max-width: 640px) { .nav-links { display: none; } }
+    .nav-links a { font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: rgba(255,255,255,.7); transition: color .2s; }
+    nav.scrolled .nav-links a { color: var(--mid); }
+    .nav-links a:hover { color: var(--white); }
+    nav.scrolled .nav-links a:hover { color: var(--graphite); }
+    .nav-cta {
+      font-size: 12px; letter-spacing: .14em; text-transform: uppercase;
+      background: var(--red); color: var(--white);
+      padding: 10px 24px; transition: background .2s;
+    }
+    .nav-cta:hover { background: var(--red-dk); }
+
+    /* HERO */
+    #hero {
+      position: relative; height: 100vh; min-height: 620px;
+      display: flex; align-items: flex-end;
+      overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute; inset: 0;
+      background:
+        linear-gradient(to bottom, rgba(28,28,28,.2) 0%, rgba(28,28,28,.1) 30%, rgba(28,28,28,.7) 75%, rgba(28,28,28,.95) 100%),
+        linear-gradient(160deg, #3a6b8a 0%, #5a8fa3 20%, #7db3c0 35%, #a8c8b8 50%, #6e9e78 65%, #2c4a32 80%, #1c1c1c 100%);
+    }
+    .hero-stripe {
+      position: absolute; left: 0; right: 0;
+      height: 3px; background: var(--red);
+      bottom: 230px; z-index: 2;
+    }
+    .hero-content {
+      position: relative; z-index: 3;
+      padding: 0 32px 72px;
+      max-width: 1140px; margin: 0 auto; width: 100%;
+    }
+    @media (max-width: 640px) { .hero-content { padding: 0 20px 56px; } }
+    .hero-eyebrow {
+      display: inline-flex; align-items: center; gap: 12px;
+      font-size: 11px; letter-spacing: .3em; text-transform: uppercase;
+      color: rgba(255,255,255,.65); margin-bottom: 20px;
+      animation: fadeUp .9s .1s both;
+    }
+    .hero-eyebrow::before { content: ''; width: 28px; height: 1px; background: var(--red); }
+    .hero-title {
+      font-family: var(--ff-head);
+      font-size: clamp(52px, 9vw, 104px);
+      font-weight: 300; line-height: 1.0; letter-spacing: -.02em;
+      color: var(--white); margin-bottom: 24px;
+      animation: fadeUp .9s .25s both;
+    }
+    .hero-title em { font-style: italic; color: var(--red); }
+    .hero-bottom {
+      display: flex; align-items: flex-end;
+      justify-content: space-between; gap: 40px; flex-wrap: wrap;
+      animation: fadeUp .9s .4s both;
+    }
+    .hero-desc { font-size: 15px; color: rgba(255,255,255,.6); max-width: 400px; line-height: 1.8; }
+    .hero-btns { display: flex; gap: 12px; flex-shrink: 0; flex-wrap: wrap; }
+    .btn-red {
+      display: inline-block; padding: 15px 36px;
+      background: var(--red); color: var(--white);
+      font-size: 12px; letter-spacing: .16em; text-transform: uppercase;
+      font-family: var(--ff-body); transition: background .2s, transform .15s;
+    }
+    .btn-red:hover { background: var(--red-dk); transform: translateY(-1px); }
+    .btn-ghost {
+      display: inline-block; padding: 14px 36px;
+      border: 1px solid rgba(255,255,255,.4); color: var(--white);
+      font-size: 12px; letter-spacing: .16em; text-transform: uppercase;
+      font-family: var(--ff-body); transition: border-color .2s, background .2s;
+    }
+    .btn-ghost:hover { border-color: rgba(255,255,255,.8); background: rgba(255,255,255,.07); }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(28px); } to { opacity: 1; transform: translateY(0); } }
+    .hero-scroll {
+      position: absolute; right: 40px; bottom: 40px; z-index: 3;
+      display: flex; flex-direction: column; align-items: center; gap: 8px;
+    }
+    @media (max-width: 640px) { .hero-scroll { display: none; } }
+    .hero-scroll-label { font-size: 9px; letter-spacing: .25em; text-transform: uppercase; color: rgba(255,255,255,.35); writing-mode: vertical-rl; }
+    .scroll-bar { width: 1px; height: 52px; background: linear-gradient(to bottom, var(--red), transparent); animation: scrollPulse 2s ease-in-out infinite; }
+    @keyframes scrollPulse { 0%,100%{opacity:.4} 50%{opacity:1} }
+
+    /* NUMBERS STRIP */
+    .numbers-strip { background: var(--graphite); border-top: 3px solid var(--red); }
+    .numbers-inner { display: grid; grid-template-columns: repeat(3, 1fr); }
+    @media (max-width: 640px) { .numbers-inner { grid-template-columns: 1fr; } }
+    .number-item { padding: 36px 40px; border-right: 1px solid rgba(255,255,255,.07); }
+    .number-item:last-child { border-right: none; }
+    .number-val { font-family: var(--ff-head); font-size: 52px; font-weight: 300; line-height: 1; color: var(--white); margin-bottom: 6px; }
+    .number-val span { color: var(--red); font-size: 28px; }
+    .number-label { font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: rgba(255,255,255,.4); }
+
+    /* LABELS & HEADINGS */
+    .label {
+      display: inline-flex; align-items: center; gap: 10px;
+      font-size: 10px; letter-spacing: .3em; text-transform: uppercase;
+      color: var(--red); margin-bottom: 16px;
+    }
+    .label::after { content: ''; width: 20px; height: 1px; background: var(--red); }
+    .h2 {
+      font-family: var(--ff-head);
+      font-size: clamp(34px, 5vw, 60px);
+      font-weight: 300; line-height: 1.1; letter-spacing: -.01em;
+      color: var(--graphite); margin-bottom: 24px;
+    }
+    .h2 em { font-style: italic; color: var(--red); }
+    .body-text { font-size: 16px; color: var(--mid); line-height: 1.85; }
+
+    /* WHAT */
+    #what { background: var(--cream); }
+    .what-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+    @media (max-width: 768px) { .what-grid { grid-template-columns: 1fr; gap: 40px; } }
+    .what-visual { position: relative; aspect-ratio: 4/3; overflow: hidden; background: var(--light); }
+    .what-visual svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+    .what-tag {
+      position: absolute; top: 24px; left: 24px; z-index: 2;
+      background: var(--red); color: var(--white);
+      font-size: 10px; letter-spacing: .2em; text-transform: uppercase;
+      padding: 6px 14px;
+    }
+    .pullquote {
+      font-family: var(--ff-head); font-style: italic;
+      font-size: clamp(17px, 2.2vw, 22px); color: var(--mid);
+      line-height: 1.55; margin-top: 28px;
+      padding-left: 20px; border-left: 2px solid var(--red);
+    }
+
+    /* INCLUDES */
+    #includes { background: var(--white); }
+    .inc-header { margin-bottom: 56px; }
+    .cards-grid { display: grid; grid-template-columns: repeat(4, 1fr); border: 1px solid var(--border); }
+    @media (max-width: 900px) { .cards-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 480px) { .cards-grid { grid-template-columns: 1fr; } }
+    .card { padding: 40px 32px; border-right: 1px solid var(--border); position: relative; transition: background .25s; }
+    .card:last-child { border-right: none; }
+    .card:hover { background: var(--cream); }
+    .card-num { font-family: var(--ff-head); font-size: 56px; font-weight: 300; color: var(--light); line-height: 1; margin-bottom: 18px; transition: color .25s; }
+    .card:hover .card-num { color: rgba(200,16,46,.1); }
+    .card-line { width: 28px; height: 2px; background: var(--red); margin-bottom: 16px; }
+    .card-title { font-family: var(--ff-head); font-size: 21px; font-weight: 400; margin-bottom: 10px; }
+    .card-text { font-size: 14px; color: var(--muted); line-height: 1.7; }
+
+    /* PORTFOLIO */
+    #portfolio { background: var(--cream); }
+    .portfolio-head { margin-bottom: 40px; }
+    .photo-grid { display: grid; grid-template-columns: repeat(4, 1fr); grid-auto-rows: 220px; gap: 4px; }
+    @media (max-width: 768px) { .photo-grid { grid-template-columns: repeat(2,1fr); grid-auto-rows: 180px; } }
+    .photo-item { position: relative; overflow: hidden; cursor: pointer; }
+    .photo-item:nth-child(1)  { grid-column: span 2; background: linear-gradient(140deg,#3a6b8a,#5a9aaa); }
+    .photo-item:nth-child(2)  { background: linear-gradient(160deg,#2c4a32,#4a7a50); }
+    .photo-item:nth-child(3)  { background: linear-gradient(180deg,#4a6880,#2a3a50); }
+    .photo-item:nth-child(4)  { background: linear-gradient(150deg,#6a4a2a,#3a2010); }
+    .photo-item:nth-child(5)  { background: linear-gradient(170deg,#3a5a6a,#6a9aaa); grid-column: span 2; }
+    .photo-item:nth-child(6)  { background: linear-gradient(130deg,#2a4a2a,#4a7060); }
+    .photo-item:nth-child(7)  { background: linear-gradient(160deg,#5a3a2a,#8a5a3a); }
+    .photo-item:nth-child(8)  { background: linear-gradient(140deg,#3a5a80,#2a3a6a); }
+    .photo-item:nth-child(9)  { background: linear-gradient(155deg,#4a6a40,#2a4a20); }
+    .photo-item:nth-child(10) { background: linear-gradient(145deg,#6a5a3a,#4a3a20); grid-column: span 2; }
+    .photo-item:nth-child(11) { background: linear-gradient(165deg,#3a6a7a,#4a8a90); }
+    .photo-item:nth-child(12) { background: linear-gradient(140deg,#5a4a3a,#3a2820); }
+    .photo-item::before { content: ''; position: absolute; inset: 0; background: rgba(28,28,28,0); transition: background .3s; }
+    .photo-item:hover::before { background: rgba(28,28,28,.25); }
+    .photo-caption {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      padding: 40px 18px 16px;
+      background: linear-gradient(to top, rgba(28,28,28,.65) 0%, transparent 100%);
+      font-size: 10px; letter-spacing: .2em; text-transform: uppercase; color: rgba(255,255,255,.8);
+    }
+    .photo-placeholder {
+      position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+      font-family: var(--ff-head); font-style: italic; font-size: 14px;
+      color: rgba(255,255,255,.15); text-align: center; padding: 16px;
+    }
+
+    /* ROUTES */
+    #routes { background: var(--white); }
+    .routes-head { margin-bottom: 56px; }
+    .routes-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 2px; }
+    @media (max-width: 768px) { .routes-grid { grid-template-columns: 1fr; } }
+    .route-card {
+      padding: 48px 36px; background: var(--cream);
+      border-top: 3px solid transparent;
+      transition: border-color .25s, background .25s;
+    }
+    .route-card:hover { border-top-color: var(--red); background: var(--light); }
+    .route-num { font-family: var(--ff-head); font-size: 80px; font-weight: 300; color: var(--border); line-height: 1; margin-bottom: -10px; }
+    .route-name { font-family: var(--ff-head); font-size: 28px; font-weight: 400; margin-bottom: 24px; margin-top: 8px; }
+    .route-list { list-style: none; }
+    .route-list li {
+      font-size: 14px; color: var(--mid); padding: 8px 0;
+      border-bottom: 1px solid var(--border); display: flex; gap: 12px; align-items: flex-start;
+    }
+    .route-list li:last-child { border-bottom: none; }
+    .route-list li::before { content: ''; width: 14px; height: 2px; background: var(--red); flex-shrink: 0; margin-top: 11px; }
+
+    /* AUDIENCE */
+    #audience { background: var(--graphite); }
+    .audience-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start; }
+    @media (max-width: 768px) { .audience-grid { grid-template-columns: 1fr; gap: 40px; } }
+    .audience-grid .label { color: var(--red); }
+    .audience-grid .h2 { color: var(--white); }
+    .audience-grid .body-text { color: rgba(255,255,255,.5); }
+    .aud-item { display: flex; align-items: flex-start; gap: 16px; padding: 18px 0; border-bottom: 1px solid rgba(255,255,255,.07); }
+    .aud-item:first-child { border-top: 1px solid rgba(255,255,255,.07); margin-top: 8px; }
+    .aud-dot { width: 8px; height: 8px; background: var(--red); flex-shrink: 0; margin-top: 7px; }
+    .aud-name { font-size: 15px; color: var(--white); }
+    .aud-sub { font-size: 12px; color: rgba(255,255,255,.35); margin-top: 2px; }
+    .audience-quote {
+      font-family: var(--ff-head); font-style: italic;
+      font-size: clamp(21px, 2.8vw, 32px); font-weight: 300;
+      color: var(--white); line-height: 1.45;
+      padding: 48px 40px; border: 1px solid rgba(255,255,255,.1);
+      position: relative;
+    }
+    .audience-quote::before {
+      content: '"'; position: absolute; top: -20px; left: 32px;
+      font-family: var(--ff-head); font-size: 100px;
+      color: var(--red); opacity: .3; line-height: 1;
+    }
+    .audience-quote-attr { margin-top: 24px; font-family: var(--ff-body); font-style: normal; font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: rgba(255,255,255,.3); }
+
+    /* NECHTO */
+    #nechto { background: var(--red); }
+    .nechto-inner { display: flex; align-items: center; justify-content: space-between; gap: 40px; flex-wrap: wrap; padding: 56px 0; }
+    .nechto-left { display: flex; align-items: center; gap: 28px; }
+    .nechto-badge {
+      width: 80px; height: 80px; border-radius: 50%;
+      border: 1px solid rgba(255,255,255,.4); flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--ff-head); font-style: italic; font-size: 12px;
+      color: var(--white); text-align: center; line-height: 1.4;
+    }
+    .nechto-title { font-family: var(--ff-head); font-size: clamp(18px, 2.5vw, 26px); font-weight: 400; color: var(--white); margin-bottom: 6px; }
+    .nechto-text { font-size: 14px; color: rgba(255,255,255,.7); }
+    .btn-white {
+      display: inline-block; padding: 15px 36px;
+      background: var(--white); color: var(--red);
+      font-size: 12px; letter-spacing: .16em; text-transform: uppercase;
+      font-family: var(--ff-body); font-weight: 500; flex-shrink: 0;
+      transition: background .2s;
+    }
+    .btn-white:hover { background: var(--cream); }
+
+    /* FOUNDER */
+    #founder { background: var(--cream); }
+    .founder-grid { display: grid; grid-template-columns: 340px 1fr; gap: 80px; align-items: center; }
+    @media (max-width: 768px) { .founder-grid { grid-template-columns: 1fr; gap: 40px; } }
+    .founder-photo { position: relative; aspect-ratio: 3/4; background: var(--light); overflow: hidden; }
+    .founder-photo::after {
+      content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 40%;
+      background: linear-gradient(to top, rgba(28,28,28,.5) 0%, transparent 100%);
+    }
+    .founder-photo-placeholder { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; }
+    .founder-photo-lbl { position: absolute; bottom: 18px; left: 20px; z-index: 2; font-size: 9px; letter-spacing: .25em; text-transform: uppercase; color: rgba(255,255,255,.7); }
+    .founder-name { font-family: var(--ff-head); font-size: clamp(34px, 4.5vw, 54px); font-weight: 300; margin-bottom: 6px; }
+    .founder-subtitle { font-size: 11px; letter-spacing: .25em; text-transform: uppercase; color: var(--red); margin-bottom: 32px; }
+    .founder-text { font-size: 16px; color: var(--mid); line-height: 1.9; }
+    .founder-stats { display: flex; gap: 40px; margin-top: 40px; padding-top: 32px; border-top: 1px solid var(--border); flex-wrap: wrap; }
+    .f-stat-val { font-family: var(--ff-head); font-size: 36px; font-weight: 300; color: var(--graphite); }
+    .f-stat-val span { color: var(--red); }
+    .f-stat-lbl { font-size: 11px; color: var(--muted); letter-spacing: .1em; text-transform: uppercase; margin-top: 2px; }
+
+    /* BOOKING */
+    #booking { background: var(--white); }
+    .booking-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start; }
+    @media (max-width: 768px) { .booking-grid { grid-template-columns: 1fr; gap: 40px; } }
+    .booking-btns { display: flex; flex-direction: column; gap: 10px; margin-top: 36px; }
+    .btn-channel {
+      display: flex; align-items: center; gap: 16px;
+      padding: 18px 24px; border: 1px solid var(--border);
+      transition: border-color .2s, background .2s;
+    }
+    .btn-channel:hover { border-color: var(--graphite); background: var(--cream); }
+    .btn-ch-icon { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .btn-ch-icon.wa { background: #25d366; }
+    .btn-ch-icon.tg { background: #229ed9; }
+    .btn-ch-icon.ig { background: linear-gradient(135deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888); }
+    .btn-ch-label { font-size: 14px; font-weight: 500; color: var(--graphite); }
+    .btn-ch-sub { font-size: 12px; color: var(--muted); }
+    .booking-side { padding: 40px; border: 1px solid var(--border); background: var(--cream); }
+    .booking-side-title { font-family: var(--ff-head); font-size: 24px; margin-bottom: 20px; }
+    .booking-steps { list-style: none; counter-reset: step; }
+    .booking-steps li {
+      display: flex; gap: 16px; font-size: 14px; color: var(--mid);
+      padding: 12px 0; border-bottom: 1px solid var(--border); align-items: flex-start;
+    }
+    .booking-steps li:last-child { border-bottom: none; }
+    .booking-steps li::before {
+      content: ''; width: 14px; height: 2px; background: var(--red);
+      flex-shrink: 0; margin-top: 11px;
+    }
+
+    /* FOOTER */
+    footer { background: var(--graphite); border-top: 3px solid var(--red); padding: 36px 0; }
+    .footer-inner { display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap; }
+    .footer-logo { font-family: var(--ff-head); font-size: 20px; color: var(--white); font-weight: 400; }
+    .footer-logo span { color: var(--red); }
+    .footer-copy { font-size: 12px; color: rgba(255,255,255,.3); letter-spacing: .08em; }
+
+    /* REVEAL */
+    .reveal { opacity: 0; transform: translateY(24px); transition: opacity .65s ease, transform .65s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .d1 { transition-delay: .1s; } .d2 { transition-delay: .2s; }
+    .d3 { transition-delay: .3s; } .d4 { transition-delay: .4s; }
+  </style>
+</head>
+<body>
+
+<nav id="navbar">
+  <div class="container nav-inner">
+    <div class="nav-logo">Газ<span> Кавказ</span></div>
+    <div class="nav-links">
+      <a href="#routes">Маршруты</a>
+      <a href="#portfolio">Поездки</a>
+      <a href="#founder">О проекте</a>
+    </div>
+    <a href="#booking" class="nav-cta">Забронировать</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg">
+    <!-- TODO: <video autoplay muted loop playsinline style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;"><source src="hero.mp4" type="video/mp4"></video> -->
+  </div>
+  <div class="hero-stripe"></div>
+  <div class="container hero-content">
+    <div class="hero-eyebrow">Сочи · Красная Поляна · Абхазия</div>
+    <h1 class="hero-title">Газ<br><em>Кавказ</em></h1>
+    <div class="hero-bottom">
+      <p class="hero-desc">Премиальные автомобильные путешествия по самым красивым дорогам региона. На спортивных автомобилях. С профессиональной съёмкой. Без групп.</p>
+      <div class="hero-btns">
+        <a href="#booking" class="btn-red">Забронировать поездку</a>
+        <a href="#routes" class="btn-ghost">Смотреть маршруты</a>
+      </div>
+    </div>
+  </div>
+  <div class="hero-scroll">
+    <div class="scroll-bar"></div>
+    <span class="hero-scroll-label">Scroll</span>
+  </div>
+</section>
+
+<!-- NUMBERS -->
+<div class="numbers-strip">
+  <div class="container">
+    <div class="numbers-inner">
+      <div class="number-item reveal">
+        <div class="number-val">3<span> маршрута</span></div>
+        <div class="number-label">Сочи · Красная Поляна · Абхазия</div>
+      </div>
+      <div class="number-item reveal d1">
+        <div class="number-val">10<span>+ лет</span></div>
+        <div class="number-label">Антон живёт и работает в Сочи</div>
+      </div>
+      <div class="number-item reveal d2">
+        <div class="number-val">100<span>%</span></div>
+        <div class="number-label">Частный формат — без групп</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- WHAT -->
+<section id="what" class="section">
+  <div class="container">
+    <div class="what-grid">
+      <div class="what-visual reveal">
+        <svg viewBox="0 0 480 360" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#7db3d0"/>
+              <stop offset="55%" stop-color="#a8c8d8"/>
+              <stop offset="100%" stop-color="#c0d4b8"/>
+            </linearGradient>
+          </defs>
+          <rect width="480" height="360" fill="url(#sky)"/>
+          <polygon points="0,360 0,210 70,110 150,175 210,85 270,148 350,65 430,120 480,95 480,360" fill="#4a7a50" opacity=".85"/>
+          <polygon points="0,360 0,250 90,170 170,225 240,145 310,195 400,115 480,165 480,360" fill="#3a6040" opacity=".75"/>
+          <path d="M90 360 Q110 285 155 255 Q200 225 178 195 Q156 165 218 135 Q280 105 262 72" stroke="#f0ece6" stroke-width="14" fill="none" stroke-linecap="round" opacity=".6"/>
+          <path d="M90 360 Q110 285 155 255 Q200 225 178 195 Q156 165 218 135 Q280 105 262 72" stroke="white" stroke-width="3" fill="none" stroke-linecap="round" opacity=".35" stroke-dasharray="18,14"/>
+          <g transform="translate(144,209) rotate(-14)">
+            <rect x="0" y="9" width="42" height="17" rx="2" fill="#c8102e"/>
+            <path d="M7 9 Q11 1 21 1 Q31 1 35 9Z" fill="#c8102e"/>
+            <circle cx="9" cy="26" r="5.5" fill="#1c1c1c"/>
+            <circle cx="33" cy="26" r="5.5" fill="#1c1c1c"/>
+            <rect x="14" y="3" width="12" height="6" rx="1" fill="rgba(180,220,255,0.5)"/>
+          </g>
+        </svg>
+        <div class="what-tag">Газ Кавказ</div>
+      </div>
+      <div>
+        <span class="label reveal">Концепция</span>
+        <h2 class="h2 reveal d1">Это не экскурсия.<br><em>Это experience.</em></h2>
+        <p class="body-text reveal d2">Частные автомобильные путешествия по самым красивым дорогам Сочи, Красной Поляны и Абхазии.</p>
+        <br>
+        <p class="body-text reveal d3">Вы едете на премиальном автомобиле, останавливаетесь в уникальных локациях и получаете профессиональные фото и видео своего путешествия.</p>
+        <div class="pullquote reveal d4">Идеально для тех, кто хочет увидеть Кавказ и получить красивый контент из путешествия.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- INCLUDES -->
+<section id="includes" class="section">
+  <div class="container">
+    <div class="inc-header">
+      <span class="label reveal">Что входит</span>
+      <h2 class="h2 reveal d1">Каждая поездка включает</h2>
+    </div>
+    <div class="cards-grid">
+      <div class="card reveal"><div class="card-num">01</div><div class="card-line"></div><div class="card-title">Премиальные автомобили</div><div class="card-text">Кабриолеты летом. Спортивные автомобили зимой. Всегда в идеальном состоянии.</div></div>
+      <div class="card reveal d1"><div class="card-num">02</div><div class="card-line"></div><div class="card-title">Уникальные маршруты</div><div class="card-text">Серпантины, горные дороги, скрытые локации — то, чего нет в туристических путеводителях.</div></div>
+      <div class="card reveal d2"><div class="card-num">03</div><div class="card-line"></div><div class="card-title">Фото и видео съёмка</div><div class="card-text">Профессиональный контент с лучших точек маршрута. Ваше путешествие в кадре.</div></div>
+      <div class="card reveal d3"><div class="card-num">04</div><div class="card-line"></div><div class="card-title">Персональный формат</div><div class="card-text">Частные поездки без групп и туристических автобусов. Только вы и дорога.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- PORTFOLIO -->
+<section id="portfolio" class="section">
+  <div class="container portfolio-head">
+    <span class="label reveal">Портфолио</span>
+    <h2 class="h2 reveal d1">Как проходят поездки</h2>
+  </div>
+  <div style="max-width:1300px;margin:0 auto;padding:0 20px;">
+    <div class="photo-grid">
+      <div class="photo-item"><div class="photo-placeholder">Серпантин · Красная Поляна</div><div class="photo-caption">Горные дороги</div></div>
+      <div class="photo-item"><div class="photo-placeholder">Кабриолет на перевале</div><div class="photo-caption">Кабриолет</div></div>
+      <div class="photo-item"><div class="photo-placeholder">Озеро Рица · Абхазия</div><div class="photo-caption">Абхазия</div></div>
+      <div class="photo-item"><div class="photo-placeholder">Смотровая площадка</div><div class="photo-caption">Панорама</div></div>
+      <div class="photo-item"><div class="photo-placeholder">Закат на серпантине</div><div class="photo-caption">Закат</div></div>
+      <div class="photo-item"><div class="photo-placeholder">Горные водопады</div><div class="photo-caption">Природа</div></div>
+      <div class="photo-item"><div class="photo-placeholder">Альпийские виды</div><div class="photo-caption">Красная Поляна</div></div>
+      <div class="photo-item"><div class="photo-placeholder">Каньон · Абхазия</div><div class="photo-caption">Каньоны</div></div>
+      <div class="photo-item"><div class="photo-placeholder">Побережье Сочи</div><div class="photo-caption">Побережье</div></div>
+      <div class="photo-item"><div class="photo-placeholder">Горный перевал</div><div class="photo-caption">Перевал</div></div>
+      <div class="photo-item"><div class="photo-placeholder">У автомобиля</div><div class="photo-caption">Атмосфера</div></div>
+      <div class="photo-item"><div class="photo-placeholder">Морская панорама</div><div class="photo-caption">Море</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ROUTES -->
+<section id="routes" class="section">
+  <div class="container">
+    <div class="routes-head">
+      <span class="label reveal">Направления</span>
+      <h2 class="h2 reveal d1">Основные маршруты</h2>
+    </div>
+    <div class="routes-grid">
+      <div class="route-card reveal">
+        <div class="route-num">01</div>
+        <div class="route-name">Побережье Сочи</div>
+        <ul class="route-list">
+          <li>Серпантины черноморского побережья</li>
+          <li>Морские панорамы с высоты</li>
+          <li>Лучшие смотровые площадки</li>
+          <li>Скрытые локации региона</li>
+        </ul>
+      </div>
+      <div class="route-card reveal d1">
+        <div class="route-num">02</div>
+        <div class="route-name">Красная Поляна</div>
+        <ul class="route-list">
+          <li>Горные серпантины и перевалы</li>
+          <li>Живописные водопады</li>
+          <li>Альпийские виды и луга</li>
+          <li>Высокогорные локации</li>
+        </ul>
+      </div>
+      <div class="route-card reveal d2">
+        <div class="route-num">03</div>
+        <div class="route-name">Абхазия</div>
+        <ul class="route-list">
+          <li>Озеро Рица — жемчужина Кавказа</li>
+          <li>Живописные каньоны</li>
+          <li>Горные перевалы</li>
+          <li>Уникальные скрытые локации</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- AUDIENCE -->
+<section id="audience" class="section">
+  <div class="container">
+    <div class="audience-grid">
+      <div>
+        <span class="label reveal">Для кого</span>
+        <h2 class="h2 reveal d1">Для кого<br><em>эти поездки</em></h2>
+        <p class="body-text reveal d2">Для тех, кто хочет увидеть Кавказ не как турист, а как путешественник.</p>
+        <div>
+          <div class="aud-item reveal d2"><div class="aud-dot"></div><div><div class="aud-name">Предприниматели и основатели</div><div class="aud-sub">Гости города — кто ценит время и формат</div></div></div>
+          <div class="aud-item reveal d2"><div class="aud-dot"></div><div><div class="aud-name">Путешественники</div><div class="aud-sub">Те, кто ищет настоящие впечатления</div></div></div>
+          <div class="aud-item reveal d3"><div class="aud-dot"></div><div><div class="aud-name">Блогеры и создатели контента</div><div class="aud-sub">Красивый контент с Кавказа</div></div></div>
+          <div class="aud-item reveal d3"><div class="aud-dot"></div><div><div class="aud-name">Пары и компании</div><div class="aud-sub">Незабываемый опыт вместе</div></div></div>
+        </div>
+      </div>
+      <div class="audience-quote reveal d2">
+        Кавказ — это не то место, которое смотрят через окно автобуса. Его нужно почувствовать на скорости, на серпантине, с открытым верхом.
+        <div class="audience-quote-attr">— Антон Шевяков, основатель</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- НЕЧТО -->
+<section id="nechto">
+  <div class="container">
+    <div class="nechto-inner">
+      <div class="nechto-left reveal">
+        <div class="nechto-badge">Нечто<br>Community</div>
+        <div>
+          <div class="nechto-title">Специальные условия для участников Нечто</div>
+          <div class="nechto-text">Свой сервис для своих. Обсудите маршрут и условия с Антоном напрямую.</div>
+        </div>
+      </div>
+      <a href="#booking" class="btn-white reveal d1">Написать Антону</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOUNDER -->
+<section id="founder" class="section">
+  <div class="container">
+    <div class="founder-grid">
+      <div class="founder-photo reveal">
+        <!-- TODO: <img src="anton.jpg" alt="Антон Шевяков" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;"> -->
+        <div class="founder-photo-placeholder">
+          <svg width="80" height="110" viewBox="0 0 80 110" fill="none" opacity=".2">
+            <ellipse cx="40" cy="32" rx="20" ry="24" stroke="#4a4a4a" stroke-width="1.5"/>
+            <path d="M5 110 Q5 72 40 68 Q75 72 75 110" stroke="#4a4a4a" stroke-width="1.5" fill="none"/>
+          </svg>
+        </div>
+        <div class="founder-photo-lbl">Антон Шевяков · Основатель</div>
+      </div>
+      <div>
+        <span class="label reveal">Основатель проекта</span>
+        <h2 class="founder-name reveal d1">Антон Шевяков</h2>
+        <div class="founder-subtitle reveal d2">Газ Кавказ · Сочи</div>
+        <p class="founder-text reveal d3">Более 10 лет живу и работаю в Сочи и знаю самые красивые маршруты региона — те, которых нет ни в одном путеводителе.</p>
+        <br>
+        <p class="founder-text reveal d4">Каждая поездка — это индивидуальный маршрут, персональное сопровождение и внимание к деталям. Не тур. Не экскурсия. Личный опыт.</p>
+        <div class="founder-stats reveal d4">
+          <div><div class="f-stat-val">10<span>+</span></div><div class="f-stat-lbl">лет в Сочи</div></div>
+          <div><div class="f-stat-val">3<span> региона</span></div><div class="f-stat-lbl">под управлением</div></div>
+          <div><div class="f-stat-val">100<span>%</span></div><div class="f-stat-lbl">частный формат</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BOOKING -->
+<section id="booking" class="section">
+  <div class="container">
+    <div class="booking-grid">
+      <div>
+        <span class="label reveal">Бронирование</span>
+        <h2 class="h2 reveal d1">Забронировать<br><em>поездку</em></h2>
+        <p class="body-text reveal d2">Напишите нам, чтобы обсудить дату, маршрут и формат. Ответим в течение часа.</p>
+        <div class="booking-btns reveal d3">
+          <!-- TODO: replace with real contacts -->
+          <a href="https://wa.me/7XXXXXXXXXX" class="btn-channel">
+            <div class="btn-ch-icon wa"><svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></div>
+            <div><div class="btn-ch-label">WhatsApp</div><div class="btn-ch-sub">Написать напрямую</div></div>
+          </a>
+          <a href="https://t.me/XXXXXXXX" class="btn-channel">
+            <div class="btn-ch-icon tg"><svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg></div>
+            <div><div class="btn-ch-label">Telegram</div><div class="btn-ch-sub">Написать в Telegram</div></div>
+          </a>
+          <a href="https://instagram.com/gas.kavkaz" class="btn-channel">
+            <div class="btn-ch-icon ig"><svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg></div>
+            <div><div class="btn-ch-label">Instagram</div><div class="btn-ch-sub">@gas.kavkaz</div></div>
+          </a>
+        </div>
+      </div>
+      <div class="booking-side reveal d2">
+        <div class="booking-side-title">Как это работает</div>
+        <ul class="booking-steps">
+          <li>Пишете нам — обсуждаем дату и маршрут</li>
+          <li>Выбираете формат поездки и автомобиль</li>
+          <li>В день поездки встречаемся в Сочи</li>
+          <li>Едем по маршруту, снимаем контент</li>
+          <li>Получаете фото и видео после поездки</li>
+        </ul>
+        <div style="margin-top:28px;padding-top:24px;border-top:1px solid var(--border);">
+          <div style="font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;">Формат</div>
+          <div style="font-family:var(--ff-head);font-size:20px;color:var(--graphite);margin-bottom:4px;">Индивидуально под вас</div>
+          <div style="font-size:14px;color:var(--muted);">Дата, маршрут, автомобиль — всё обсуждается лично.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <div class="footer-logo">Газ<span> Кавказ</span></div>
+      <div class="footer-copy">© 2025 · Премиальные автомобильные путешествия · Сочи</div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const nav = document.getElementById('navbar');
+  window.addEventListener('scroll', () => { nav.classList.toggle('scrolled', window.scrollY > 50); });
+  const reveals = document.querySelectorAll('.reveal');
+  const obs = new IntersectionObserver(e => { e.forEach(el => { if (el.isIntersecting) el.target.classList.add('visible'); }); }, { threshold: 0.1, rootMargin: '0px 0px -30px 0px' });
+  reveals.forEach(el => obs.observe(el));
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => { const t = document.querySelector(a.getAttribute('href')); if (t) { e.preventDefault(); t.scrollIntoView({ behavior: 'smooth' }); } });
+  });
+</script>
+</body>
 </html>
