@@ -97,6 +97,12 @@
       width: 100%; height: 100%;
       object-fit: cover;
       object-position: center 40%;
+      animation: heroImageIn 2s ease-out both;
+      will-change: transform;
+    }
+    @keyframes heroImageIn {
+      from { opacity: 0; transform: scale(1.08); }
+      to { opacity: 1; transform: scale(1); }
     }
     .hero-bg::after {
       content: '';
@@ -242,11 +248,11 @@
     .what-grid { display:grid; grid-template-columns:1fr 1fr; gap:80px; align-items:center; }
     @media(max-width:768px){ .what-grid { grid-template-columns:1fr; gap:40px; } }
     .what-visual {
-      position:relative; aspect-ratio:4/3;
+      position:relative; aspect-ratio:3/4;
       background:var(--panel); overflow:hidden;
       clip-path:polygon(0 0, 100% 0, 100% 88%, 92% 100%, 0 100%);
     }
-    .what-visual img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+    .what-visual img { position:absolute; inset:0; width:100%; height:100%; object-fit:contain; }
     .what-visual::after { content:''; position:absolute; bottom:0; right:0; width:60px; height:60px; background:var(--red); clip-path:polygon(100% 0, 100% 100%, 0 100%); }
     .what-text .body { font-size:17px; color:var(--dim); line-height:1.85; }
     .what-text .body+.body { margin-top:16px; }
@@ -275,23 +281,28 @@
     @media(max-width:640px){ .port-head { padding:0 20px; } }
 
     .masonry {
-      column-count: 4;
-      column-gap: 4px;
-      padding: 0 4px;
+      display: flex;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      gap: 0;
+      padding: 0;
+      scrollbar-width: none; /* Firefox */
+      -ms-overflow-style: none; /* IE and Edge */
     }
-    @media(max-width:900px){ .masonry { column-count: 3; } }
-    @media(max-width:600px){ .masonry { column-count: 2; } }
+    .masonry::-webkit-scrollbar { display: none; } /* Chrome, Safari */
 
     .masonry-item {
-      break-inside: avoid;
-      margin-bottom: 4px;
+      flex: 0 0 100vw;
+      scroll-snap-align: start;
+      height: 70vh;
       position: relative;
       overflow: hidden;
       display: block;
     }
     .masonry-item img {
       width: 100%;
-      height: auto;
+      height: 100%;
+      object-fit: cover;
       display: block;
       transition: transform .5s ease;
     }
@@ -431,7 +442,7 @@
 <!-- HERO -->
 <section id="hero">
   <div class="hero-bg">
-    <img src="photo_hero.jpeg" alt="Красный кабриолет на горном серпантине Кавказа">
+    <img src="photo_2026-03-14 15.40.13.jpeg" alt="Красный кабриолет на горном серпантине Кавказа">
   </div>
   <div class="speed-lines">
     <div class="speed-line"></div>
@@ -503,15 +514,15 @@
 <section id="what" class="s">
   <div class="wrap">
     <div class="what-grid">
-      <div class="what-visual rv">
-        <img src="krasnoe_avto.JPG" alt="Красный автомобиль">
-      </div>
       <div class="what-text">
         <div class="eyebrow rv">Концепция</div>
         <h2 class="big-title rv d1">ЭТО НЕ<br>ЭКСКУРСИЯ.<br><span class="r">ЭТО ДРАЙВ.</span></h2>
         <p class="body rv d2">Газ Кавказ — частные автомобильные путешествия по самым красивым дорогам Сочи, Красной Поляны и Абхазии.</p>
         <p class="body rv d3">Вы едете на премиальном автомобиле, останавливаетесь в уникальных локациях и получаете профессиональные фото и видео своего путешествия.</p>
         <div class="highlight-box rv d4">Идеально для тех, кто хочет увидеть Кавказ и получить красивый контент из путешествия.</div>
+      </div>
+      <div class="what-visual rv">
+        <img src="IMG_3756.jpg" alt="Красный автомобиль">
       </div>
     </div>
   </div>
@@ -543,13 +554,15 @@
     <div class="masonry-item"><img src="IMG_6047.jpg" alt=""></div>
     <div class="masonry-item"><img src="NNN08593.jpg" alt=""></div>
     <div class="masonry-item"><img src="IMG_3349.jpg" alt=""></div>
-    <div class="masonry-item"><img src="IMG_3756.JPG" alt=""></div>
+    <div class="masonry-item"><img src="IMG_3756.jpg" alt=""></div>
     <div class="masonry-item"><img src="NNN08282.jpg" alt=""></div>
-    <div class="masonry-item"><img src="IMG_3744.jpg" alt=""></div>
-    <div class="masonry-item"><img src="IMG_3742.jpg" alt=""></div>
-    <div class="masonry-item"><img src="doch_kacheli.jpg" alt=""></div>
-    <div class="masonry-item"><img src="IMG_3740.jpg" alt=""></div>
-    <div class="masonry-item"><img src="IMG_3739.jpg" alt=""></div>
+    <div class="masonry-item"><img src="anton_avto.JPG" alt=""></div>
+    <div class="masonry-item"><img src="IMG_3346.jpg" alt=""></div>
+    <div class="masonry-item"><img src="IMG_7711.jpg" alt=""></div>
+    <div class="masonry-item"><img src="DSC06715.jpg" alt=""></div>
+    <div class="masonry-item"><img src="DSC06933.jpg" alt=""></div>
+    <div class="masonry-item"><img src="DSC06941.jpg" alt=""></div>
+    <div class="masonry-item"><img src="DSC06978.jpg" alt=""></div>
   </div>
 </section>
 
@@ -639,7 +652,7 @@
     <div class="eyebrow rv">Основатель</div>
     <div class="founder-grid">
       <div class="founder-photo rv">
-        <img src="sinee_avto.jpg" alt="Антон Шевяков">
+        <img src="anton.jpg" alt="Антон Шевяков">
         <div class="founder-photo-lbl">Антон Шевяков · Основатель</div>
       </div>
       <div>
@@ -727,7 +740,15 @@
     el.addEventListener('mouseleave', () => cur.classList.remove('big'));
   });
   const nav = document.getElementById('nav');
-  window.addEventListener('scroll', () => { nav.classList.toggle('scrolled', window.scrollY > 60); });
+  window.addEventListener('scroll', () => { 
+    nav.classList.toggle('scrolled', window.scrollY > 60);
+    // Parallax for hero bg
+    const scrolled = window.pageYOffset;
+    const heroBg = document.querySelector('.hero-bg img');
+    if (heroBg) {
+      heroBg.style.transform = `scale(1) translateY(${scrolled * 0.3}px)`;
+    }
+  });
   const rvEls = document.querySelectorAll('.rv');
   const obs = new IntersectionObserver(es => {
     es.forEach(e => { if (e.isIntersecting) e.target.classList.add('on'); });
